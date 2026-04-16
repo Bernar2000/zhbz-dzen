@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ЖБЗ Дзен — Телеграм → Статья</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=JetBrains+Mono:wght@400;500&family=Geologica:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f0f0f;
+    --surface: #171717;
+    --surface2: #1f1f1f;
+    --border: #2a2a2a;
+    --border2: #3a3a3a;
+    --text: #f0ede8;
+    --text2: #8a8580;
+    --text3: #5a5550;
+    --accent: #c9a96e;
+    --accent2: #e8c98a;
+    --accent-dim: rgba(201,169,110,0.12);
+    --accent-dim2: rgba(201,169,110,0.06);
+    --green: #4a9e6e;
+    --green-dim: rgba(74,158,110,0.12);
+    --red: #c06060;
+    --radius: 12px;
+    --radius-sm: 8px;
+    --shadow: 0 4px 24px rgba(0,0,0,0.4);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Geologica', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* ── TOP BAR ── */
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 28px;
+    height: 60px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(12px);
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .logo-mark {
+    width: 32px;
+    height: 32px;
+    background: var(--accent);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    color: #0f0f0f;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .logo-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: -0.02em;
+  }
+
+  .logo-sub {
+    font-size: 11px;
+    color: var(--text3);
+    font-weight: 300;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .badge-model {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    background: var(--accent-dim);
+    border: 1px solid rgba(201,169,110,0.2);
+    padding: 3px 8px;
+    border-radius: 20px;
+    letter-spacing: 0.04em;
+  }
+
+  /* ── LAYOUT ── */
+  .app {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    min-height: calc(100vh - 60px);
+  }
+
+  /* ── LEFT PANEL ── */
+  .panel-left {
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    max-height: calc(100vh - 60px);
+    position: sticky;
+    top: 60px;
+  }
+
+  .panel-section {
+    padding: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .panel-section:last-child { border-bottom: none; }
+
+  .section-label {
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 14px;
+  }
+
+  /* Textarea */
+  .field-label {
+    font-size: 12px;
+    color: var(--text2);
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  textarea, input[type="url"], input[type="text"] {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    font-family: 'Geologica', sans-serif;
+    font-size: 13px;
+    line-height: 1.6;
+    padding: 10px 12px;
+    resize: vertical;
+    transition: border-color 0.2s;
+    outline: none;
+  }
+
+  textarea:focus, input:focus {
+    border-color: var(--accent);
+  }
+
+  textarea::placeholder, input::placeholder { color: var(--text3); }
+
+  #posts-input { min-height: 160px; }
+
+  /* Selects */
+  .select-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .select-group { display: flex; flex-direction: column; gap: 5px; }
+
+  select {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    font-family: 'Geologica', sans-serif;
+    font-size: 12px;
+    padding: 8px 10px;
+    outline: none;
+    cursor: pointer;
+    transition: border-color 0.2s;
+    width: 100%;
+  }
+
+  select:focus { border-color: var(--accent); }
+
+  /* Toggle tabs */
+  .toggle-group {
+    display: flex;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    margin-top: 10px;
+  }
+
+  .toggle-btn {
+    flex: 1;
+    padding: 8px 6px;
+    background: transparent;
+    border: none;
+    color: var(--text2);
+    font-family: 'Geologica', sans-serif;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+    border-right: 1px solid var(--border);
+  }
+
+  .toggle-btn:last-child { border-right: none; }
+
+  .toggle-btn.on {
+    background: var(--accent-dim);
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  /* Source tabs */
+  .src-tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 10px;
+  }
+
+  .src-tab {
+    flex: 1;
+    padding: 7px 4px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text2);
+    font-family: 'Geologica', sans-serif;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+
+  .src-tab.on {
+    background: var(--accent-dim);
+    color: var(--accent);
+    border-color: rgba(201,169,110,0.3);
+    font-weight: 500;
+  }
+
+  .src-panel { display: none; }
+  .src-panel.on { display: block; }
+
+  .src-hint {
+    font-size: 11px;
+    color: var(--text3);
+    line-height: 1.5;
+    padding: 8px 10px;
+    background: var(--surface);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    margin-bottom: 8px;
+  }
+
+  .link-row {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+
+  .link-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text3);
+    min-width: 16px;
+  }
+
+  .link-row input {
+    flex: 1;
+    font-size: 12px;
+    padding: 7px 10px;
+    resize: none;
+    min-height: unset;
+  }
+
+  .add-link-btn {
+    width: 100%;
+    background: transparent;
+    border: 1px dashed var(--border2);
+    border-radius: var(--radius-sm);
+    color: var(--accent);
+    font-family: 'Geologica', sans-serif;
+    font-size: 12px;
+    padding: 7px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 4px;
+  }
+
+  .add-link-btn:hover {
+    background: var(--accent-dim2);
+    border-color: var(--accent);
+  }
+
+  /* Context input */
+  .ctx-input {
+    margin-top: 10px;
+  }
+
+  /* Generate button */
+  .generate-btn {
+    width: 100%;
+    background: var(--accent);
+    color: #0f0f0f;
+    border: none;
+    border-radius: var(--radius);
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: -0.01em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .generate-btn:hover {
+    background: var(--accent2);
+    transform: translateY(-1px);
+  }
+
+  .generate-btn:active { transform: translateY(0); }
+
+  .generate-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .btn-icon { font-size: 16px; }
+
+  /* ── RIGHT PANEL ── */
+  .panel-right {
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - 60px);
+  }
+
+  .result-header {
+    padding: 20px 28px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .result-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    color: var(--text2);
+    font-weight: 400;
+  }
+
+  .result-actions {
+    display: flex;
+    gap: 8px;
+  }
+
+  .action-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text2);
+    font-family: 'Geologica', sans-serif;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .action-btn:hover {
+    border-color: var(--border2);
+    color: var(--text);
+  }
+
+  .action-btn.success {
+    border-color: var(--green);
+    color: var(--green);
+    background: var(--green-dim);
+  }
+
+  /* Result body */
+  .result-body {
+    flex: 1;
+    padding: 28px;
+    overflow-y: auto;
+  }
+
+  /* Empty state */
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    min-height: 400px;
+    text-align: center;
+    gap: 16px;
+  }
+
+  .empty-icon {
+    font-size: 48px;
+    opacity: 0.15;
+  }
+
+  .empty-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: var(--text2);
+    font-weight: 400;
+  }
+
+  .empty-sub {
+    font-size: 13px;
+    color: var(--text3);
+    max-width: 320px;
+    line-height: 1.6;
+  }
+
+  .empty-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    text-align: left;
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .step-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 12px;
+    color: var(--text3);
+  }
+
+  .step-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    background: var(--accent-dim);
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* Loading state */
+  .loading-state {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    min-height: 400px;
+    gap: 20px;
+    text-align: center;
+  }
+
+  .loading-state.show { display: flex; }
+  .empty-state.hide { display: none; }
+
+  .loader-ring {
+    width: 48px;
+    height: 48px;
+    border: 2px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .loading-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: var(--text2);
+    font-weight: 400;
+  }
+
+  .loading-sub {
+    font-size: 12px;
+    color: var(--text3);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* Article output */
+  .article-output {
+    display: none;
+    animation: fadeIn 0.4s ease;
+  }
+
+  .article-output.show { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .article-content {
+    font-size: 16px;
+    line-height: 1.8;
+    color: var(--text);
+    max-width: 720px;
+  }
+
+  .article-content h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.3;
+    margin-bottom: 24px;
+    letter-spacing: -0.02em;
+  }
+
+  .article-content h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text);
+    margin-top: 32px;
+    margin-bottom: 14px;
+    letter-spacing: -0.01em;
+  }
+
+  .article-content p {
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+
+  .article-content strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .article-content hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 28px 0;
+  }
+
+  /* Meta bar */
+  .meta-bar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 28px;
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+    flex-wrap: wrap;
+  }
+
+  .meta-item {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text3);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .meta-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--green);
+    border-radius: 50%;
+  }
+
+  /* Error state */
+  .error-state {
+    display: none;
+    background: rgba(192,96,96,0.08);
+    border: 1px solid rgba(192,96,96,0.2);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    color: var(--red);
+    font-size: 13px;
+  }
+
+  .error-state.show { display: block; }
+
+  /* ── MOBILE ── */
+  @media (max-width: 768px) {
+    .app {
+      grid-template-columns: 1fr;
+    }
+
+    .panel-left {
+      position: static;
+      max-height: none;
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .topbar { padding: 0 16px; }
+    .panel-section { padding: 16px; }
+    .result-header { padding: 14px 16px; }
+    .result-body { padding: 16px; }
+    .meta-bar { padding: 10px 16px; }
+
+    .logo-sub { display: none; }
+
+    .select-row { grid-template-columns: 1fr; }
+
+    .article-content h1 { font-size: 22px; }
+    .article-content h2 { font-size: 18px; }
+    .article-content { font-size: 15px; }
+  }
+
+  @media (max-width: 400px) {
+    .src-tabs { flex-direction: column; }
+  }
+
+  /* ── SOURCES BLOCK ── */
+  .sources-block {
+    margin-top: 40px;
+    border-top: 1px solid var(--border);
+    padding-top: 24px;
+    max-width: 720px;
+  }
+
+  .sources-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .sources-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .sources-count {
+    background: var(--accent-dim);
+    color: var(--accent);
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 20px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .sources-toggle {
+    font-size: 12px;
+    color: var(--text3);
+    transition: transform 0.2s;
+  }
+
+  .sources-toggle.open { transform: rotate(180deg); }
+
+  .sources-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    max-height: 0;
+  }
+
+  .sources-list.open { max-height: 600px; }
+
+  .source-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    transition: border-color 0.2s;
+    text-decoration: none;
+  }
+
+  .source-item:hover { border-color: var(--border2); }
+
+  .source-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    background: var(--accent-dim);
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .source-info { flex: 1; min-width: 0; }
+
+  .source-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .source-url {
+    font-size: 11px;
+    color: var(--text3);
+    font-family: 'JetBrains Mono', monospace;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .source-type {
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 20px;
+    flex-shrink: 0;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .source-type.auto {
+    background: var(--green-dim);
+    color: var(--green);
+  }
+
+  .source-type.manual {
+    background: var(--accent-dim);
+    color: var(--accent);
+  }
+
+  .source-type.post {
+    background: rgba(90,85,80,0.15);
+    color: var(--text3);
+  }
+
+  .sources-block {
+    margin-top: 40px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    max-width: 720px;
+  }
+
+  .sources-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    cursor: pointer;
+    background: var(--surface);
+    user-select: none;
+    transition: background 0.15s;
+  }
+
+  .sources-header:hover { background: var(--surface2); }
+
+  .sources-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .sources-count {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    background: var(--accent-dim);
+    color: var(--accent);
+    padding: 2px 7px;
+    border-radius: 20px;
+  }
+
+  .sources-toggle {
+    font-size: 11px;
+    color: var(--text3);
+    transition: transform 0.2s;
+  }
+
+  .sources-toggle.open { transform: rotate(180deg); }
+
+  .sources-list {
+    display: none;
+    flex-direction: column;
+    border-top: 1px solid var(--border);
+  }
+
+  .sources-list.open { display: flex; }
+
+  .source-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--border);
+    text-decoration: none;
+    transition: background 0.15s;
+  }
+
+  .source-item:last-child { border-bottom: none; }
+  .source-item:hover { background: var(--surface2); }
+
+  .source-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .src-copy-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text3);
+    border-radius: 6px;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+
+  .src-copy-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-dim);
+  }
+
+  .src-copy-btn.copied {
+    border-color: var(--green);
+    color: var(--green);
+    background: var(--green-dim);
+  }
+
+  .source-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text3);
+    min-width: 20px;
+  }
+
+  .source-info { flex: 1; min-width: 0; }
+
+  .source-name {
+    font-size: 13px;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: 400;
+  }
+
+  .source-item:hover .source-name { color: var(--accent); }
+
+  .source-url {
+    font-size: 11px;
+    color: var(--text3);
+    font-family: 'JetBrains Mono', monospace;
+    margin-top: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 320px;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<header class="topbar">
+  <div class="logo">
+    <div class="logo-mark">Ж</div>
+    <div>
+      <div class="logo-text">ЖБЗ Дзен</div>
+      <div class="logo-sub">Телеграм → Статья</div>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <span class="badge-model">Claude Sonnet</span>
+  </div>
+</header>
+
+<div class="app">
+
+  <!-- LEFT PANEL -->
+  <aside class="panel-left">
+
+    <!-- Посты -->
+    <div class="panel-section">
+      <div class="section-label">Исходный материал</div>
+      <label class="field-label">Текст постов из Телеграма</label>
+      <textarea id="posts-input" placeholder="Вставь один или несколько постов из Телеграм-канала…"></textarea>
+    </div>
+
+    <!-- Настройки -->
+    <div class="panel-section">
+      <div class="section-label">Настройки статьи</div>
+
+      <div class="select-row">
+        <div class="select-group">
+          <label class="field-label">Формат</label>
+          <select id="sel-fmt">
+            <option value="article">Статья-разбор</option>
+            <option value="listicle">Список</option>
+            <option value="opinion">Колонка</option>
+            <option value="guide">Гайд</option>
+          </select>
+        </div>
+        <div class="select-group">
+          <label class="field-label">Длина</label>
+          <select id="sel-len">
+            <option value="short">400–600 слов</option>
+            <option value="medium" selected>600–900 слов</option>
+            <option value="long">900–1200 слов</option>
+          </select>
+        </div>
+      </div>
+
+      <label class="field-label" style="margin-top:14px">Стиль подачи</label>
+      <div class="toggle-group">
+        <button class="toggle-btn on" id="sty-0" onclick="setStyle(0)">Мой стиль ЖБЗ</button>
+        <button class="toggle-btn" id="sty-1" onclick="setStyle(1)">Стандартный Дзен</button>
+      </div>
+    </div>
+
+    <!-- Источники -->
+    <div class="panel-section">
+      <div class="section-label">Дополнительные источники</div>
+      <div class="src-tabs">
+        <button class="src-tab on" id="tab-none" onclick="setSrc('none')">Без источников</button>
+        <button class="src-tab" id="tab-auto" onclick="setSrc('auto')">Автопоиск</button>
+        <button class="src-tab" id="tab-links" onclick="setSrc('links')">Мои ссылки</button>
+      </div>
+
+      <div class="src-panel on" id="panel-none">
+        <div class="src-hint">Статья будет написана только на основе твоих постов.</div>
+      </div>
+
+      <div class="src-panel" id="panel-auto">
+        <div class="src-hint">Claude сам найдёт релевантные источники — статистику, аналитику рынка — и органично вплетёт данные в текст.</div>
+      </div>
+
+      <div class="src-panel" id="panel-links">
+        <div class="src-hint">Вставь до 5 ссылок — прочитаю страницы и использую данные в статье.</div>
+        <div id="links-list">
+          <div class="link-row">
+            <span class="link-num">01</span>
+            <input type="url" placeholder="https://…">
+          </div>
+        </div>
+        <button class="add-link-btn" id="add-link-btn" onclick="addLink()">+ добавить ссылку</button>
+      </div>
+
+      <div class="ctx-input">
+        <label class="field-label" style="margin-top:12px">Контекст и акценты</label>
+        <input type="text" id="ctx-input" placeholder="Что подчеркнуть, что опустить…">
+      </div>
+    </div>
+
+    <!-- Кнопка -->
+    <div class="panel-section">
+      <button class="generate-btn" id="gen-btn" onclick="generate()">
+        <span class="btn-icon">✦</span>
+        Написать статью
+      </button>
+    </div>
+
+  </aside>
+
+  <!-- RIGHT PANEL -->
+  <main class="panel-right">
+
+    <div class="result-header">
+      <div class="result-title" id="result-title">Результат появится здесь</div>
+      <div class="result-actions" id="result-actions" style="display:none">
+        <button class="action-btn" id="copy-btn" onclick="copyResult()">
+          <span>⎘</span> Скопировать
+        </button>
+        <button class="action-btn" id="clear-btn" onclick="clearResult()">
+          <span>✕</span> Очистить
+        </button>
+      </div>
+    </div>
+
+    <div class="result-body">
+
+      <!-- Empty -->
+      <div class="empty-state" id="empty-state">
+        <div class="empty-icon">✦</div>
+        <div class="empty-title">Готов к работе</div>
+        <div class="empty-sub">Вставь посты из Телеграма, выбери настройки и нажми «Написать статью»</div>
+        <div class="empty-steps">
+          <div class="step-item">
+            <div class="step-num">1</div>
+            <span>Вставь текст постов из Телеграм-канала</span>
+          </div>
+          <div class="step-item">
+            <div class="step-num">2</div>
+            <span>Выбери формат, длину и стиль</span>
+          </div>
+          <div class="step-item">
+            <div class="step-num">3</div>
+            <span>Укажи источники при необходимости</span>
+          </div>
+          <div class="step-item">
+            <div class="step-num">4</div>
+            <span>Нажми «Написать статью» — получи готовый текст</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Loading -->
+      <div class="loading-state" id="loading-state">
+        <div class="loader-ring"></div>
+        <div class="loading-text" id="loading-text">Пишу статью…</div>
+        <div class="loading-sub" id="loading-sub">анализирую посты</div>
+      </div>
+
+      <!-- Error -->
+      <div class="error-state" id="error-state"></div>
+
+      <!-- Article -->
+      <div class="article-output" id="article-output">
+        <div class="article-content" id="article-content"></div>
+
+        <!-- Sources block -->
+        <div class="sources-block" id="sources-block" style="display:none">
+          <div class="sources-header" onclick="toggleSources()">
+            <div class="sources-title">
+              Источники
+              <span class="sources-count" id="sources-count">0</span>
+            </div>
+            <span class="sources-toggle" id="sources-toggle">▼</span>
+          </div>
+          <div class="sources-list" id="sources-list"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Meta bar -->
+    <div class="meta-bar" id="meta-bar" style="display:none">
+      <div class="meta-item">
+        <div class="meta-dot"></div>
+        <span id="meta-words">0 слов</span>
+      </div>
+      <div class="meta-item">
+        <span id="meta-style"></span>
+      </div>
+      <div class="meta-item">
+        <span id="meta-src"></span>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+const MY_STYLE = `СТИЛЬ АВТОРА (соблюдай точно):
+- Нейтральный аналитический тон, по делу, без воды и канцелярита
+- Конкретные цифры с источником в скобках (Циан, CORE.XP, Dataflat, Дом.РФ, ЦБ, IBC Real Estate, NF Group)
+- Прямые цитаты аналитиков — коротко, в кавычках
+- 1–2 предложения авторского комментария после данных, иногда с лёгкой иронией
+- Никогда не начинай с "В последнее время…", "Ни для кого не секрет…" и банальных вступлений`;
+
+const LEAD_RULES = `ПРАВИЛА ЦЕПЛЯЮЩЕГО НАЧАЛА (обязательно):
+- Первый абзац — 2–3 предложения, которые сразу захватывают читателя
+- Используй: парадокс, неожиданный факт, резкий контраст или интригу
+- После лида — чёткий анонс: что именно разберём в статье
+- Не пиши шаблонно — каждый лид должен быть уникальным`;
+
+const STRUCTURE = `СТРУКТУРА СТАТЬИ:
+1. Цепляющий лид (2–3 предложения с интригой или парадоксом)
+2. Рыночный контекст — общая картина
+3. Основной разбор с подзаголовками (выдели **жирным**)
+4. Вывод + призыв подписаться на канал`;
+
+const NICHE = "блог о потребительском рынке и строительстве в России";
+
+let styleVal = 0;
+let srcMode = 'none';
+let linkCount = 1;
+let rawText = '';
+
+function setStyle(v) {
+  styleVal = v;
+  document.getElementById('sty-0').classList.toggle('on', v === 0);
+  document.getElementById('sty-1').classList.toggle('on', v === 1);
+}
+
+function setSrc(mode) {
+  srcMode = mode;
+  ['none','auto','links'].forEach(m => {
+    document.getElementById('tab-'+m).classList.toggle('on', m === mode);
+    document.getElementById('panel-'+m).classList.toggle('on', m === mode);
+  });
+}
+
+function addLink() {
+  if (linkCount >= 5) return;
+  linkCount++;
+  const list = document.getElementById('links-list');
+  const row = document.createElement('div');
+  row.className = 'link-row';
+  row.innerHTML = `<span class="link-num">0${linkCount}</span><input type="url" placeholder="https://…">`;
+  list.appendChild(row);
+  if (linkCount >= 5) document.getElementById('add-link-btn').style.display = 'none';
+}
+
+function getLinks() {
+  return [...document.querySelectorAll('#links-list input')]
+    .map(el => el.value.trim()).filter(Boolean);
+}
+
+function countWords(text) {
+  return text.trim().split(/\s+/).filter(Boolean).length;
+}
+
+function renderMarkdown(text) {
+  return text
+    .replace(/^# (.+)$/gm, '<h1>$1</h1>')
+    .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+    .replace(/^### (.+)$/gm, '<h2>$1</h2>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/^---$/gm, '')
+    .replace(/\n\n+/g, '</p><p>')
+    .replace(/^(?!<[h|hr])(.+)$/gm, (m) => m.startsWith('<') ? m : m)
+    .split('\n\n')
+    .map(p => {
+      if (p.startsWith('<h') || p.startsWith('<hr')) return p;
+      return `<p>${p}</p>`;
+    })
+    .join('\n');
+}
+
+async function generate() {
+  const posts = document.getElementById('posts-input').value.trim();
+  if (!posts) {
+    document.getElementById('posts-input').focus();
+    document.getElementById('posts-input').style.borderColor = 'var(--red)';
+    setTimeout(() => document.getElementById('posts-input').style.borderColor = '', 2000);
+    return;
+  }
+
+  const fmt = document.getElementById('sel-fmt').value;
+  const len = document.getElementById('sel-len').value;
+  const ctx = document.getElementById('ctx-input').value.trim();
+  const links = getLinks();
+
+  const fmtMap = {article:'связная статья-разбор',listicle:'список с пояснениями',opinion:'авторская колонка',guide:'практический гайд'};
+  const lenMap = {short:'400–600 слов',medium:'600–900 слов',long:'900–1200 слов'};
+
+  const styBlock = styleVal === 0 ? '\n\n' + MY_STYLE : '';
+
+  let srcBlock = '';
+  if (srcMode === 'auto') {
+    srcBlock = `\n\nДОПОЛНИТЕЛЬНЫЕ ИСТОЧНИКИ — АВТОПОИСК:
+Перед написанием найди 2–4 релевантных источника по теме постов.
+Ищи: статистику и аналитику от Циан, CORE.XP, Dataflat, Дом.РФ, ЦБ, IBC Real Estate, NF Group, Росстат.
+Вплети найденные данные органично в текст с источником в скобках.`;
+  } else if (srcMode === 'links' && links.length > 0) {
+    srcBlock = `\n\nДОПОЛНИТЕЛЬНЫЕ ИСТОЧНИКИ — прочитай и используй данные из:\n${links.map((l,i) => `${i+1}. ${l}`).join('\n')}\nВплети данные органично со ссылкой на источник.`;
+  }
+
+  const prompt = `Ты автор Яндекс Дзен. Тематика: ${NICHE}.${styBlock}${srcBlock}
+
+${LEAD_RULES}
+
+${STRUCTURE}
+
+Адаптируй посты из Телеграма в статью для Дзена.
+
+Правила:
+1. Сохрани все факты и цифры — ничего не выдумывай
+2. Единая логика: каждый абзац продолжает предыдущий, без противоречий
+3. Убери ТГ-маркеры (✅📌😉), сделай живой авторский текст
+4. Пиши так, чтобы не было ощущения нейросети — живо, с позицией, с иронией где уместно
+${srcMode !== 'none' ? '5. Данные из источников вплети органично, со ссылкой на источник' : ''}
+
+Формат: ${fmtMap[fmt]}, длина: ${lenMap[len]}
+${ctx ? 'Учти: ' + ctx : ''}
+
+Посты:
+---
+${posts}
+---
+
+Используй # для заголовка статьи и ## для подзаголовков. Выдели ключевые мысли **жирным**. Между разделами НЕ ставь ---, просто используй подзаголовки.
+
+После статьи добавь строго в конце блок:
+SOURCES_JSON:{"sources":[{"name":"Название","url":"https://...","type":"auto"}]}
+
+Правила блока SOURCES_JSON:
+- Включай только реально процитированные источники
+- type = "auto" если нашёл сам, "manual" если из переданных ссылок, "post" если только из постов
+- Если использовал только данные постов: SOURCES_JSON:{"sources":[{"name":"Телеграм-канал ЖБЗ","url":"","type":"post"}]}
+- Блок SOURCES_JSON — строго последняя строка, никакого текста после него
+- Вся строка SOURCES_JSON должна быть одной строкой без переносов
+
+Только готовая статья + SOURCES_JSON в конце.`;
+
+  // Show loading
+  document.getElementById('empty-state').classList.add('hide');
+  document.getElementById('article-output').classList.remove('show');
+  document.getElementById('error-state').classList.remove('show');
+  document.getElementById('loading-state').classList.add('show');
+  document.getElementById('meta-bar').style.display = 'none';
+  document.getElementById('result-actions').style.display = 'none';
+  document.getElementById('result-title').textContent = 'Генерирую…';
+  document.getElementById('gen-btn').disabled = true;
+
+  const loadingMsgs = [
+    ['Анализирую посты…', 'читаю контекст'],
+    ['Ищу нужный угол…', 'формирую структуру'],
+    ['Пишу статью…', 'подбираю формулировки'],
+    ['Шлифую текст…', 'финальные правки'],
+  ];
+  let msgIdx = 0;
+  const msgInterval = setInterval(() => {
+    msgIdx = (msgIdx + 1) % loadingMsgs.length;
+    document.getElementById('loading-text').textContent = loadingMsgs[msgIdx][0];
+    document.getElementById('loading-sub').textContent = loadingMsgs[msgIdx][1];
+  }, 2500);
+
+  try {
+    const res = await fetch('/api/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 4000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+
+    clearInterval(msgInterval);
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error?.message || `HTTP ${res.status}`);
+    }
+
+    const data = await res.json();
+    rawText = data.content?.map(b => b.text || '').join('') || '';
+
+    // Парсим источники из SOURCES_JSON блока
+    let articleText = rawText;
+    let sources = [];
+    const srcMatch = rawText.match(/SOURCES_JSON:(\{.+\})\s*$/s);
+    if (srcMatch) {
+      try {
+        const parsed = JSON.parse(srcMatch[1]);
+        sources = parsed.sources || [];
+      } catch(e) {}
+      articleText = rawText.replace(/SOURCES_JSON:.+$/s, '').trim();
+    }
+
+    document.getElementById('article-content').innerHTML = renderMarkdown(articleText);
+    document.getElementById('article-output').classList.add('show');
+    document.getElementById('loading-state').classList.remove('show');
+
+    // Рендерим источники
+    renderSources(sources, links);
+
+    const words = countWords(articleText);
+    document.getElementById('meta-words').textContent = `${words} слов`;
+    document.getElementById('meta-style').textContent = styleVal === 0 ? 'Стиль ЖБЗ' : 'Стандартный Дзен';
+    document.getElementById('meta-src').textContent = srcMode === 'auto' ? '+ автопоиск' : srcMode === 'links' ? `+ ${links.length} ссылок` : 'без доп. источников';
+    document.getElementById('meta-bar').style.display = 'flex';
+    document.getElementById('result-actions').style.display = 'flex';
+    document.getElementById('result-title').textContent = 'Готово';
+
+  } catch (e) {
+    clearInterval(msgInterval);
+    document.getElementById('loading-state').classList.remove('show');
+    document.getElementById('empty-state').classList.remove('hide');
+    document.getElementById('error-state').textContent = 'Ошибка: ' + e.message;
+    document.getElementById('error-state').classList.add('show');
+    document.getElementById('result-title').textContent = 'Ошибка';
+  }
+
+  document.getElementById('gen-btn').disabled = false;
+}
+
+function renderSources(sources, manualLinks) {
+  const block = document.getElementById('sources-block');
+  const list = document.getElementById('sources-list');
+  const count = document.getElementById('sources-count');
+
+  // Если источников нет и нет ручных ссылок — скрываем блок
+  if (!sources.length && !manualLinks.length) {
+    block.style.display = 'none';
+    return;
+  }
+
+  // Добавляем ручные ссылки которые не попали в sources
+  const allSources = [...sources];
+  if (srcMode === 'links') {
+    manualLinks.forEach(url => {
+      const already = allSources.find(s => s.url === url);
+      if (!already) {
+        const domain = (() => { try { return new URL(url).hostname.replace('www.',''); } catch(e) { return url; } })();
+        allSources.push({ name: domain, url, type: 'manual' });
+      }
+    });
+  }
+
+  if (!allSources.length) { block.style.display = 'none'; return; }
+
+  count.textContent = allSources.length;
+  list.innerHTML = '';
+
+  allSources.forEach((src, i) => {
+    const domain = src.url ? (() => { try { return new URL(src.url).hostname.replace('www.',''); } catch(e) { return ''; } })() : '';
+    const typeLabels = { auto: 'автопоиск', manual: 'ссылка', post: 'посты' };
+    const el = document.createElement('div');
+    el.className = 'source-item';
+    el.innerHTML = `
+      <div class="source-num">${i + 1}</div>
+      <div class="source-info">
+        <div class="source-name">${src.name || domain || 'Источник'}</div>
+        ${src.url ? `<div class="source-url" title="${src.url}">${src.url}</div>` : ''}
+      </div>
+      <div class="source-actions">
+        <span class="source-type ${src.type || 'auto'}">${typeLabels[src.type] || src.type}</span>
+        ${src.url ? `<button class="src-copy-btn" onclick="copyUrl(this)" data-url="${src.url}" title="Скопировать ссылку">⎘</button>` : ''}
+      </div>
+    `;
+    list.appendChild(el);
+  });
+
+  block.style.display = 'block';
+  // Открываем блок по умолчанию
+  list.classList.add('open');
+  document.getElementById('sources-toggle').classList.add('open');
+}
+
+function toggleSources() {
+  const list = document.getElementById('sources-list');
+  const toggle = document.getElementById('sources-toggle');
+  list.classList.toggle('open');
+  toggle.classList.toggle('open');
+}
+
+function copyResult() {
+  if (!rawText) return;
+  const textToCopy = rawText.replace(/SOURCES_JSON:.+$/s, '').trim();
+  const btn = document.getElementById('copy-btn');
+
+  const showSuccess = () => {
+    btn.classList.add('success');
+    btn.innerHTML = '<span>✓</span> Скопировано';
+    setTimeout(() => {
+      btn.classList.remove('success');
+      btn.innerHTML = '<span>⎘</span> Скопировать';
+    }, 2500);
+  };
+
+  // Основной метод (HTTPS)
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(textToCopy).then(showSuccess).catch(() => fallbackCopy(textToCopy, showSuccess));
+  } else {
+    // Запасной метод (HTTP / локально)
+    fallbackCopy(textToCopy, showSuccess);
+  }
+}
+
+function fallbackCopy(text, callback) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.cssText = 'position:fixed;left:-9999px;top:-9999px;opacity:0';
+  document.body.appendChild(ta);
+  ta.focus();
+  ta.select();
+  try {
+    document.execCommand('copy');
+    callback();
+  } catch(e) {
+    alert('Не удалось скопировать. Выдели текст вручную и нажми Cmd+C');
+  }
+  document.body.removeChild(ta);
+}
+
+function copyUrl(btn) {
+  const url = btn.dataset.url;
+  if (!url) return;
+  const doIt = () => {
+    btn.textContent = '✓';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = '⎘'; btn.classList.remove('copied'); }, 2000);
+  };
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(url).then(doIt).catch(() => { fallbackCopy(url, doIt); });
+  } else {
+    fallbackCopy(url, doIt);
+  }
+}
+
+function clearResult() {
+  rawText = '';
+  document.getElementById('article-output').classList.remove('show');
+  document.getElementById('empty-state').classList.remove('hide');
+  document.getElementById('error-state').classList.remove('show');
+  document.getElementById('meta-bar').style.display = 'none';
+  document.getElementById('result-actions').style.display = 'none';
+  document.getElementById('result-title').textContent = 'Результат появится здесь';
+  document.getElementById('sources-block').style.display = 'none';
+  document.getElementById('sources-list').innerHTML = '';
+}
+</script>
+</body>
+</html>
