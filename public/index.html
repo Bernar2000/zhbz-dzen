@@ -96,6 +96,45 @@
     gap: 8px;
   }
 
+  .nav-tabs {
+    display: flex;
+    gap: 2px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 3px;
+  }
+
+  .nav-tab {
+    padding: 5px 14px;
+    border-radius: 6px;
+    background: transparent;
+    border: none;
+    color: var(--text2);
+    font-family: 'Geologica', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .nav-tab.on {
+    background: var(--bg);
+    color: var(--text);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  }
+
+  .nav-tab-count {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    background: var(--accent-dim);
+    color: var(--accent);
+    padding: 1px 6px;
+    border-radius: 20px;
+  }
+
   .badge-model {
     font-family: 'JetBrains Mono', monospace;
     font-size: 10px;
@@ -908,6 +947,410 @@
     max-width: 320px;
   }
 
+  /* ── МОЙ СТИЛЬ ── */
+  .style-samples { display: flex; flex-direction: column; gap: 8px; }
+
+  .sample-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .sample-item:hover { border-color: var(--border2); }
+
+  .sample-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .sample-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .sample-active-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    display: none;
+  }
+
+  .sample-active-dot.show { display: block; }
+
+  .sample-del {
+    background: none;
+    border: none;
+    color: var(--text3);
+    cursor: pointer;
+    font-size: 13px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    line-height: 1;
+    transition: all 0.15s;
+  }
+
+  .sample-del:hover { color: var(--red); background: rgba(192,96,96,0.08); }
+
+  .sample-body { padding: 0 12px 10px; display: none; }
+  .sample-body.open { display: block; }
+
+  .sample-textarea {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: 'Geologica', sans-serif;
+    font-size: 12px;
+    padding: 8px 10px;
+    resize: vertical;
+    min-height: 90px;
+    outline: none;
+    line-height: 1.6;
+    transition: border-color 0.2s;
+  }
+
+  .sample-textarea:focus { border-color: var(--accent); }
+  .sample-textarea::placeholder { color: var(--text3); }
+
+  .sample-save-btn {
+    margin-top: 6px;
+    padding: 5px 12px;
+    background: var(--accent-dim);
+    border: 1px solid rgba(201,169,110,0.2);
+    border-radius: 6px;
+    color: var(--accent);
+    font-family: 'Geologica', sans-serif;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .sample-save-btn:hover { background: rgba(201,169,110,0.2); }
+
+  .add-sample-btn {
+    width: 100%;
+    background: transparent;
+    border: 1px dashed var(--border2);
+    border-radius: var(--radius-sm);
+    color: var(--text3);
+    font-family: 'Geologica', sans-serif;
+    font-size: 12px;
+    padding: 9px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 4px;
+  }
+
+  .add-sample-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim2); }
+
+  .style-status {
+    font-size: 11px;
+    color: var(--text3);
+    padding: 8px 10px;
+    background: var(--surface);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    line-height: 1.5;
+    margin-bottom: 8px;
+  }
+
+  .style-status.active {
+    border-color: rgba(74,158,110,0.3);
+    background: var(--green-dim);
+    color: var(--green);
+  }
+
+  /* ── ИСТОРИЯ ── */
+  .history-page {
+    display: none;
+    padding: 28px;
+    max-width: 900px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .history-page.show { display: block; }
+
+  .history-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .history-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: -0.01em;
+  }
+
+  .history-search {
+    flex: 1;
+    max-width: 300px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    font-family: 'Geologica', sans-serif;
+    font-size: 13px;
+    padding: 8px 12px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .history-search:focus { border-color: var(--accent); }
+  .history-search::placeholder { color: var(--text3); }
+
+  .history-empty {
+    text-align: center;
+    padding: 80px 20px;
+    color: var(--text3);
+  }
+
+  .history-empty-icon { font-size: 36px; opacity: 0.15; margin-bottom: 16px; }
+  .history-empty-title { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--text2); margin-bottom: 8px; }
+  .history-empty-sub { font-size: 13px; line-height: 1.6; max-width: 280px; margin: 0 auto; }
+
+  .history-list { display: flex; flex-direction: column; gap: 16px; }
+
+  .hist-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .hist-card:hover { border-color: var(--border2); }
+
+  .hist-card-header {
+    padding: 16px 20px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .hist-card-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+    flex-wrap: wrap;
+  }
+
+  .hist-date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .hist-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 20px;
+    background: var(--surface2);
+    color: var(--text3);
+  }
+
+  .hist-badge.style-mine { background: var(--accent-dim); color: var(--accent); }
+  .hist-badge.src-auto { background: var(--green-dim); color: var(--green); }
+
+  .hist-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    color: var(--text);
+    font-weight: 600;
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+  }
+
+  .hist-preview {
+    font-size: 13px;
+    color: var(--text3);
+    line-height: 1.5;
+    margin-top: 6px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .hist-card-actions {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  .hist-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text3);
+    font-family: 'Geologica', sans-serif;
+    font-size: 11px;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+
+  .hist-btn:hover { border-color: var(--border2); color: var(--text); }
+  .hist-btn.danger:hover { border-color: var(--red); color: var(--red); background: rgba(192,96,96,0.08); }
+
+  .hist-body {
+    display: none;
+    border-top: 1px solid var(--border);
+  }
+
+  .hist-body.open { display: block; }
+
+  .hist-article {
+    padding: 20px;
+    font-size: 14px;
+    line-height: 1.75;
+    color: var(--text);
+    max-height: 400px;
+    overflow-y: auto;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hist-article h1 { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--text); margin-bottom: 14px; letter-spacing: -0.02em; }
+  .hist-article h2 { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 600; color: var(--text); margin: 20px 0 10px; }
+  .hist-article p { margin-bottom: 12px; }
+  .hist-article strong { color: var(--text); font-weight: 500; }
+
+  .hist-comments {
+    padding: 16px 20px;
+  }
+
+  .hist-comments-label {
+    font-size: 11px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-family: 'JetBrains Mono', monospace;
+    margin-bottom: 10px;
+  }
+
+  .hist-comment-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+
+  .hist-comment-item {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .hist-comment-text {
+    flex: 1;
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.5;
+    word-break: break-word;
+  }
+
+  .hist-comment-date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text3);
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .hist-comment-del {
+    background: none;
+    border: none;
+    color: var(--text3);
+    cursor: pointer;
+    font-size: 12px;
+    padding: 0 4px;
+    transition: color 0.15s;
+    flex-shrink: 0;
+  }
+
+  .hist-comment-del:hover { color: var(--red); }
+
+  .hist-comment-input-row {
+    display: flex;
+    gap: 8px;
+    align-items: flex-end;
+  }
+
+  .hist-comment-input {
+    flex: 1;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    font-family: 'Geologica', sans-serif;
+    font-size: 13px;
+    padding: 8px 12px;
+    outline: none;
+    resize: none;
+    min-height: 38px;
+    max-height: 100px;
+    line-height: 1.5;
+    transition: border-color 0.2s;
+  }
+
+  .hist-comment-input:focus { border-color: var(--accent); }
+  .hist-comment-input::placeholder { color: var(--text3); }
+
+  .hist-comment-send {
+    background: var(--accent-dim);
+    border: 1px solid rgba(201,169,110,0.2);
+    border-radius: var(--radius-sm);
+    color: var(--accent);
+    font-family: 'Geologica', sans-serif;
+    font-size: 12px;
+    padding: 8px 14px;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+    height: 38px;
+  }
+
+  .hist-comment-send:hover { background: rgba(201,169,110,0.2); }
+
+  .hist-words-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text3);
+    margin-top: 4px;
+  }
+
+  @media (max-width: 768px) {
+    .history-page { padding: 16px; }
+    .nav-tabs { display: none; }
+    .mobile-nav { display: flex; }
+  }
+
   /* Scrollbar */
   ::-webkit-scrollbar { width: 4px; }
   ::-webkit-scrollbar-track { background: transparent; }
@@ -926,6 +1369,12 @@
     </div>
   </div>
   <div class="topbar-right">
+    <div class="nav-tabs">
+      <button class="nav-tab on" id="nav-editor" onclick="switchPage('editor')">Редактор</button>
+      <button class="nav-tab" id="nav-history" onclick="switchPage('history')">
+        История <span class="nav-tab-count" id="history-count">0</span>
+      </button>
+    </div>
     <span class="badge-model">Claude Sonnet</span>
   </div>
 </header>
@@ -1005,6 +1454,14 @@
         <label class="field-label" style="margin-top:12px">Контекст и акценты</label>
         <input type="text" id="ctx-input" placeholder="Что подчеркнуть, что опустить…">
       </div>
+    </div>
+
+    <!-- Мой стиль -->
+    <div class="panel-section">
+      <div class="section-label">Мой стиль</div>
+      <div class="style-status" id="style-status">Добавь 2–3 своих текста — Claude будет писать ближе к твоему голосу</div>
+      <div class="style-samples" id="style-samples"></div>
+      <button class="add-sample-btn" id="add-sample-btn" onclick="addSample()">+ добавить пример текста</button>
     </div>
 
     <!-- Кнопка -->
@@ -1105,6 +1562,16 @@
   </main>
 </div>
 
+<!-- ИСТОРИЯ -->
+<div class="history-page" id="history-page">
+  <div class="history-toolbar">
+    <div class="history-title">История статей</div>
+    <input class="history-search" id="history-search" type="text" placeholder="Поиск по заголовку…" oninput="renderHistory()">
+    <button class="hist-btn danger" onclick="clearHistory()" style="margin-left:auto">Очистить всё</button>
+  </div>
+  <div id="history-list"></div>
+</div>
+
 <script>
 const MY_STYLE = `СТИЛЬ АВТОРА (соблюдай точно):
 - Нейтральный аналитический тон, по делу, без воды и канцелярита
@@ -1131,6 +1598,122 @@ let styleVal = 0;
 let srcMode = 'none';
 let linkCount = 1;
 let rawText = '';
+
+// ── МОЙ СТИЛЬ ──
+const SAMPLES_KEY = 'zhbz_style_samples';
+let samples = [];
+
+function loadSamples() {
+  try {
+    const saved = localStorage.getItem(SAMPLES_KEY);
+    samples = saved ? JSON.parse(saved) : [];
+  } catch(e) { samples = []; }
+  renderSamples();
+}
+
+function saveSamples() {
+  try { localStorage.setItem(SAMPLES_KEY, JSON.stringify(samples)); } catch(e) {}
+  renderSamples();
+}
+
+function addSample() {
+  if (samples.length >= 5) {
+    alert('Максимум 5 примеров. Удали один чтобы добавить новый.');
+    return;
+  }
+  samples.push({ id: Date.now(), text: '', open: true });
+  saveSamples();
+}
+
+function deleteSample(id) {
+  samples = samples.filter(s => s.id !== id);
+  saveSamples();
+}
+
+function toggleSample(id) {
+  const s = samples.find(s => s.id === id);
+  if (s) { s.open = !s.open; renderSamples(); }
+}
+
+function saveSampleText(id, text) {
+  const s = samples.find(s => s.id === id);
+  if (s) { s.text = text; saveSamples(); }
+}
+
+function renderSamples() {
+  const container = document.getElementById('style-samples');
+  const statusEl = document.getElementById('style-status');
+  const addBtn = document.getElementById('add-sample-btn');
+  const activeSamples = samples.filter(s => s.text.trim().length > 50);
+
+  if (activeSamples.length > 0) {
+    statusEl.className = 'style-status active';
+    statusEl.textContent = `✓ ${activeSamples.length} пример${activeSamples.length > 1 ? 'а' : ''} — Claude учтёт твой стиль`;
+  } else {
+    statusEl.className = 'style-status';
+    statusEl.textContent = 'Добавь 2–3 своих текста — Claude будет писать ближе к твоему голосу';
+  }
+
+  addBtn.style.display = samples.length >= 5 ? 'none' : 'block';
+
+  container.innerHTML = samples.map((s, i) => `
+    <div class="sample-item">
+      <div class="sample-header" onclick="toggleSample(${s.id})">
+        <div class="sample-label">
+          <div class="sample-active-dot ${s.text.trim().length > 50 ? 'show' : ''}"></div>
+          Пример ${i + 1}
+          ${s.text.trim().length > 50 ? `· ${s.text.trim().split(/\s+/).length} слов` : '· пусто'}
+        </div>
+        <button class="sample-del" onclick="event.stopPropagation(); deleteSample(${s.id})" title="Удалить">✕</button>
+      </div>
+      <div class="sample-body ${s.open ? 'open' : ''}">
+        <textarea
+          class="sample-textarea"
+          placeholder="Вставь свой пост или фрагмент статьи (минимум 50 слов)…"
+          oninput="updateSampleText(${s.id}, this.value)"
+        >${s.text}</textarea>
+        <button class="sample-save-btn" onclick="saveSampleText(${s.id}, document.querySelector('[data-sid=\'${s.id}\']')?.value || '')">Сохранить</button>
+      </div>
+    </div>
+  `).join('');
+
+  // Навешиваем oninput через data-атрибут
+  container.querySelectorAll('.sample-textarea').forEach((el, i) => {
+    el.dataset.sid = samples[i].id;
+    el.addEventListener('input', function() {
+      const sid = parseInt(this.dataset.sid);
+      const s = samples.find(s => s.id === sid);
+      if (s) { s.text = this.value; }
+      const dot = this.closest('.sample-item').querySelector('.sample-active-dot');
+      const lbl = this.closest('.sample-item').querySelector('.sample-label');
+      const wordCount = this.value.trim().split(/\s+/).filter(Boolean).length;
+      if (dot) dot.classList.toggle('show', this.value.trim().length > 50);
+    });
+    el.addEventListener('blur', function() {
+      const sid = parseInt(this.dataset.sid);
+      saveSampleText(sid, this.value);
+    });
+  });
+
+  container.querySelectorAll('.sample-save-btn').forEach((btn, i) => {
+    btn.onclick = function() {
+      const ta = this.previousElementSibling;
+      saveSampleText(samples[i].id, ta.value);
+      this.textContent = 'Сохранено ✓';
+      this.style.color = 'var(--green)';
+      setTimeout(() => { this.textContent = 'Сохранить'; this.style.color = ''; }, 1500);
+    };
+  });
+}
+
+function getStyleExamples() {
+  return samples.filter(s => s.text.trim().length > 50).map(s => s.text.trim());
+}
+
+// Инициализация
+loadSamples();
+
+// ── КОНЕЦ МОЙ СТИЛЬ ──
 
 function setStyle(v) {
   styleVal = v;
@@ -1202,6 +1785,15 @@ async function generate() {
 
   const styBlock = styleVal === 0 ? '\n\n' + MY_STYLE : '';
 
+  // Few-shot примеры стиля
+  const styleExamples = getStyleExamples();
+  const examplesBlock = styleExamples.length > 0 ? `
+
+ПРИМЕРЫ МОЕГО СТИЛЯ (пиши похоже — улови ритм, структуру предложений, подачу):
+${styleExamples.map((ex, i) => `--- Пример ${i+1} ---\n${ex}`).join('\n\n')}
+--- Конец примеров ---
+Изучи примеры и пиши в том же голосе, ритме и манере.` : '';
+
   let srcBlock = '';
   if (srcMode === 'auto') {
     srcBlock = `\n\nДОПОЛНИТЕЛЬНЫЕ ИСТОЧНИКИ — АВТОПОИСК:
@@ -1212,7 +1804,7 @@ async function generate() {
     srcBlock = `\n\nДОПОЛНИТЕЛЬНЫЕ ИСТОЧНИКИ — прочитай и используй данные из:\n${links.map((l,i) => `${i+1}. ${l}`).join('\n')}\nВплети данные органично со ссылкой на источник.`;
   }
 
-  const prompt = `Ты автор Яндекс Дзен. Тематика: ${NICHE}.${styBlock}${srcBlock}
+  const prompt = `Ты автор Яндекс Дзен. Тематика: ${NICHE}.${styBlock}${examplesBlock}${srcBlock}
 
 ${LEAD_RULES}
 
@@ -1277,7 +1869,7 @@ SOURCES_JSON:{"sources":[{"name":"Название","url":"https://...","type":"
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-5',
+        model: 'claude-sonnet-4-20250514',
         max_tokens: 4000,
         messages: [{ role: 'user', content: prompt }]
       })
@@ -1319,6 +1911,14 @@ SOURCES_JSON:{"sources":[{"name":"Название","url":"https://...","type":"
     document.getElementById('meta-bar').style.display = 'flex';
     document.getElementById('result-actions').style.display = 'flex';
     document.getElementById('result-title').textContent = 'Готово';
+
+    // Сохраняем в историю
+    saveArticleToHistory(articleText, {
+      fmt: document.getElementById('sel-fmt').value,
+      len: document.getElementById('sel-len').value,
+      style: styleVal,
+      src: srcMode
+    });
 
   } catch (e) {
     clearInterval(msgInterval);
@@ -1445,6 +2045,193 @@ function copyUrl(btn) {
     fallbackCopy(url, doIt);
   }
 }
+
+// ── ИСТОРИЯ ──
+const HISTORY_KEY = 'zhbz_history';
+let history_articles = [];
+
+function loadHistory() {
+  try {
+    const saved = localStorage.getItem(HISTORY_KEY);
+    history_articles = saved ? JSON.parse(saved) : [];
+  } catch(e) { history_articles = []; }
+  updateHistoryCount();
+}
+
+function saveHistory() {
+  try { localStorage.setItem(HISTORY_KEY, JSON.stringify(history_articles)); } catch(e) {}
+  updateHistoryCount();
+}
+
+function updateHistoryCount() {
+  document.getElementById('history-count').textContent = history_articles.length;
+}
+
+function saveArticleToHistory(articleText, meta) {
+  // Извлекаем заголовок из markdown
+  const titleMatch = articleText.match(/^#\s+(.+)$/m);
+  const title = titleMatch ? titleMatch[1].trim() : 'Без заголовка';
+  // Превью — первый абзац без заголовка
+  const preview = articleText.replace(/^#.+$/m, '').replace(/#{1,3}.+/g, '').replace(/\*\*/g,'').trim().split('\n').filter(l=>l.trim()).slice(0,2).join(' ').substring(0, 200);
+
+  const entry = {
+    id: Date.now(),
+    title,
+    preview,
+    text: articleText,
+    date: new Date().toISOString(),
+    meta: meta || {},
+    comments: [],
+    open: false
+  };
+
+  history_articles.unshift(entry);
+  // Храним не более 50 статей
+  if (history_articles.length > 50) history_articles = history_articles.slice(0, 50);
+  saveHistory();
+}
+
+function deleteArticle(id) {
+  if (!confirm('Удалить статью?')) return;
+  history_articles = history_articles.filter(a => a.id !== id);
+  saveHistory();
+  renderHistory();
+}
+
+function clearHistory() {
+  if (!confirm('Удалить все статьи? Это действие нельзя отменить.')) return;
+  history_articles = [];
+  saveHistory();
+  renderHistory();
+}
+
+function toggleArticle(id) {
+  const a = history_articles.find(a => a.id === id);
+  if (a) { a.open = !a.open; renderHistory(); }
+}
+
+function addComment(id) {
+  const input = document.getElementById(`comment-input-${id}`);
+  const text = input ? input.value.trim() : '';
+  if (!text) return;
+  const a = history_articles.find(a => a.id === id);
+  if (!a) return;
+  a.comments.push({ id: Date.now(), text, date: new Date().toISOString() });
+  saveHistory();
+  renderHistory();
+}
+
+function deleteComment(articleId, commentId) {
+  const a = history_articles.find(a => a.id === articleId);
+  if (!a) return;
+  a.comments = a.comments.filter(c => c.id !== commentId);
+  saveHistory();
+  renderHistory();
+}
+
+function copyArticleText(id) {
+  const a = history_articles.find(a => a.id === id);
+  if (!a) return;
+  const clean = a.text.replace(/SOURCES_JSON:.+$/s,'').trim();
+  const btn = document.getElementById(`copy-hist-${id}`);
+  const doIt = () => {
+    if (btn) { btn.textContent = '✓ Скопировано'; setTimeout(() => btn.textContent = '⎘ Копировать', 2000); }
+  };
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(clean).then(doIt);
+  } else { fallbackCopy(clean, doIt); }
+}
+
+function formatDate(iso) {
+  const d = new Date(iso);
+  return d.toLocaleDateString('ru-RU', { day:'numeric', month:'short', year:'numeric' }) +
+    ' · ' + d.toLocaleTimeString('ru-RU', { hour:'2-digit', minute:'2-digit' });
+}
+
+function formatDateShort(iso) {
+  const d = new Date(iso);
+  return d.toLocaleDateString('ru-RU', { day:'numeric', month:'short' }) +
+    ' ' + d.toLocaleTimeString('ru-RU', { hour:'2-digit', minute:'2-digit' });
+}
+
+function renderHistory() {
+  const container = document.getElementById('history-list');
+  const query = (document.getElementById('history-search')?.value || '').toLowerCase().trim();
+
+  let filtered = history_articles;
+  if (query) {
+    filtered = history_articles.filter(a =>
+      a.title.toLowerCase().includes(query) ||
+      a.preview.toLowerCase().includes(query)
+    );
+  }
+
+  if (!filtered.length) {
+    container.innerHTML = `<div class="history-empty">
+      <div class="history-empty-icon">◈</div>
+      <div class="history-empty-title">${query ? 'Ничего не найдено' : 'Ещё нет статей'}</div>
+      <div class="history-empty-sub">${query ? 'Попробуй другой запрос' : 'Сгенерированные статьи будут сохраняться здесь автоматически'}</div>
+    </div>`;
+    return;
+  }
+
+  const words = (text) => text.trim().split(/\s+/).filter(Boolean).length;
+
+  container.innerHTML = filtered.map(a => {
+    const meta = a.meta || {};
+    const fmtLabels = {article:'разбор', listicle:'список', opinion:'колонка', guide:'гайд'};
+    const lenLabels = {short:'400–600 слов', medium:'600–900 слов', long:'900–1200 слов'};
+
+    return `<div class="hist-card" id="hist-${a.id}">
+      <div class="hist-card-header" onclick="toggleArticle(${a.id})">
+        <div style="flex:1;min-width:0">
+          <div class="hist-card-meta">
+            <span class="hist-date">${formatDate(a.date)}</span>
+            ${meta.fmt ? `<span class="hist-badge">${fmtLabels[meta.fmt]||meta.fmt}</span>` : ''}
+            ${meta.style === 0 ? '<span class="hist-badge style-mine">ЖБЗ</span>' : ''}
+            ${meta.src === 'auto' ? '<span class="hist-badge src-auto">автопоиск</span>' : ''}
+            ${a.comments.length > 0 ? `<span class="hist-badge">💬 ${a.comments.length}</span>` : ''}
+          </div>
+          <div class="hist-title">${a.title}</div>
+          <div class="hist-preview">${a.preview}</div>
+        </div>
+        <div class="hist-card-actions">
+          <button class="hist-btn" id="copy-hist-${a.id}" onclick="event.stopPropagation(); copyArticleText(${a.id})">⎘ Копировать</button>
+          <button class="hist-btn danger" onclick="event.stopPropagation(); deleteArticle(${a.id})">✕</button>
+        </div>
+      </div>
+      <div class="hist-body ${a.open ? 'open' : ''}">
+        <div class="hist-article">${renderMarkdown(a.text.replace(/SOURCES_JSON:.+$/s,'').trim())}</div>
+        <div class="hist-comments">
+          <div class="hist-comments-label">Комментарии ${a.comments.length > 0 ? `· ${a.comments.length}` : ''}</div>
+          ${a.comments.length > 0 ? `<div class="hist-comment-list">
+            ${a.comments.map(c => `<div class="hist-comment-item">
+              <div class="hist-comment-text">${c.text.replace(/</g,'&lt;')}</div>
+              <div class="hist-comment-date">${formatDateShort(c.date)}</div>
+              <button class="hist-comment-del" onclick="deleteComment(${a.id}, ${c.id})" title="Удалить">✕</button>
+            </div>`).join('')}
+          </div>` : ''}
+          <div class="hist-comment-input-row">
+            <textarea class="hist-comment-input" id="comment-input-${a.id}" placeholder="Добавить заметку или комментарий…" rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();addComment(${a.id})}"></textarea>
+            <button class="hist-comment-send" onclick="addComment(${a.id})">Добавить</button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function switchPage(page) {
+  const isHistory = page === 'history';
+  document.getElementById('nav-editor').classList.toggle('on', !isHistory);
+  document.getElementById('nav-history').classList.toggle('on', isHistory);
+  document.querySelector('.app').style.display = isHistory ? 'none' : 'grid';
+  document.getElementById('history-page').classList.toggle('show', isHistory);
+  if (isHistory) renderHistory();
+}
+
+// Инициализация истории
+loadHistory();
 
 function clearResult() {
   rawText = '';
